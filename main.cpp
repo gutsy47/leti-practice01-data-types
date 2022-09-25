@@ -1,5 +1,19 @@
 #include <iostream>
 
+void printSizeOfTypes() {
+    std::cout << "\n Data Type  | Size (bytes)\n";
+    std::cout << "------------+-------------\n";
+    std::cout << "        int | " << sizeof(int) << '\n';
+    std::cout << "  short int | " << sizeof(short) << '\n';
+    std::cout << "   long int | " << sizeof(long) << '\n';
+    std::cout << "      float | " << sizeof(float) << '\n';
+    std::cout << "     double | " << sizeof(double) << '\n';
+    std::cout << "long double | " << sizeof(long double) << '\n';
+    std::cout << "       char | " << sizeof(char) << '\n';
+    std::cout << "       bool | " << sizeof(bool) << '\n';
+}
+
+
 int main() {
     // Main loop
     while (true) {
@@ -16,7 +30,8 @@ int main() {
         switch (userAction) {
             // Print the amount of memory occupied by different types of data
             case '1': {
-                std::cout << "Memory sizes:\n";
+                std::cout << "Memory occupied by certain data types\n";
+                printSizeOfTypes();
                 break;
             }
             // Print the binary representation in memory of an integer
