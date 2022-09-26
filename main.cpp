@@ -13,6 +13,24 @@ void printSizeOfTypes() {
     std::cout << "       bool | " << sizeof(bool) << '\n';
 }
 
+std::string getBinaryRepresentationOfInt(int value) {
+    /*
+     * Returns binary representation of int
+     * :param value: int - decimal integer
+     * :return: std::string - binary representation of value
+     */
+    unsigned int order = sizeof(int) * 8;
+    unsigned int mask = 1 << (order - 1);
+    std::string binaryInt;
+    for (int i = 1; i <= order; i++) {
+        binaryInt += value & mask ? '1' : '0';
+        value <<= 1;
+        if (i % 8 == 0 || i == 1)
+            binaryInt += ' ';
+    }
+    return binaryInt;
+}
+
 
 int main() {
     // Main loop
@@ -28,12 +46,14 @@ int main() {
         }
 
         switch (userAction) {
+
             // Print the amount of memory occupied by different types of data
             case '1': {
                 std::cout << "Memory occupied by certain data types\n";
                 printSizeOfTypes();
                 break;
             }
+
             // Print the binary representation in memory of an integer
             case '2': {
                 int userInput;
@@ -46,8 +66,11 @@ int main() {
                     break;
                 }
                 std::cout << "Decimal integer: " << userInput << '\n';
+                std::string binaryInt = getBinaryRepresentationOfInt(userInput);
+                std::cout << "Binary representation: " << binaryInt << '\n';
                 break;
             }
+
             // Print the binary representation in memory of a float
             case '3': {
                 float userInput;
@@ -62,6 +85,7 @@ int main() {
                 std::cout << "Decimal float: " << userInput << '\n';
                 break;
             }
+
             // Print the binary representation in memory of a double
             case '4': {
                 double userInput;
