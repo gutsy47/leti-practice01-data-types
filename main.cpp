@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 
 void printSizeOfTypes() {
     std::cout << "\n Data Type  | Size (bytes)\n";
@@ -13,18 +14,32 @@ void printSizeOfTypes() {
     std::cout << "       bool | " << sizeof(bool) << '\n';
 }
 
-std::string getBinaryRepresentationOfInt(int value) {
+
+std::string getBitsOfInt(int value, bool isDebug = false) {
     /*
      * Returns binary representation of int
      * :param value: int - decimal integer
+     * :param isDebug: bool - displays every comparison if true
      * :return: std::string - binary representation of value
      */
     unsigned int order = sizeof(int) * 8;
     unsigned int mask = 1 << (order - 1);
     std::string binaryInt;
     for (int i = 1; i <= order; i++) {
-        binaryInt += value & mask ? '1' : '0';
-        value <<= 1;
+
+        char bit = value & mask ? '1' : '0';
+
+        // Display iteration details
+        if (isDebug) {
+            std::cout << value << " & " << std::setw(10) << mask << " = " << bit;
+            std::string binaryValue = getBitsOfInt(value);
+            std::string binaryMask = getBitsOfInt(int(mask));
+            std::cout << " | " << binaryValue << "& " << binaryMask << '\n';
+        }
+
+        binaryInt += bit;
+        mask >>= 1;
+
         if (i % 8 == 0 || i == 1)
             binaryInt += ' ';
     }
@@ -33,6 +48,10 @@ std::string getBinaryRepresentationOfInt(int value) {
 
 
 int main() {
+
+    std::cout.setf(std::ios::boolalpha);
+    bool isDebug = false;
+
     // Main loop
     while (true) {
 
@@ -66,7 +85,7 @@ int main() {
                     break;
                 }
                 std::cout << "Decimal integer: " << userInput << '\n';
-                std::string binaryInt = getBinaryRepresentationOfInt(userInput);
+                std::string binaryInt = getBitsOfInt(userInput, isDebug);
                 std::cout << "Binary representation: " << binaryInt << '\n';
                 break;
             }
@@ -98,6 +117,11 @@ int main() {
                     break;
                 }
                 std::cout << "Decimal double: " << userInput << '\n';
+                break;
+            }
+            case '9': {
+                isDebug = !isDebug;
+                std::cout << "Debug mode: " << isDebug << '\n';
                 break;
             }
             default: {
