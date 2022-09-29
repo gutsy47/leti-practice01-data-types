@@ -47,6 +47,45 @@ std::string getBitsOfInt(int value, bool isDebug = false) {
 }
 
 
+std::string getBitsOfFloat(float input, bool isDebug = false) {
+    /*
+     * Returns binary representation of float
+     * :param input: float - decimal float
+     * :param isDebug: bool - displays every comparison if true
+     * :return: std::string - binary representation of input
+     */
+    // Use union due to binary operands isn't working with float
+    union FloatIntUnion {
+        int i;
+        float f;
+    };
+
+    FloatIntUnion value{.f = input};
+    unsigned int order = sizeof(float) * 8;
+    unsigned int mask = 1 << (order - 1);
+    std::string binaryFloat;
+    for (int i = 1; i <= order; i++) {
+
+        char bit = value.i & mask ? '1' : '0';
+
+        // Display iteration details
+        if (isDebug) {
+            std::cout << value.f << " & " << std::setw(10) << mask << " = " << bit;
+            std::string binaryValue = getBitsOfInt(value.i); // It's enough to get int`s bits (or float, no diff)
+            std::string binaryMask = getBitsOfInt(int(mask));
+            std::cout << " | " << binaryValue << "& " << binaryMask << '\n';
+        }
+
+        binaryFloat += bit;
+        mask >>= 1;
+
+        if (i % 8 == 0 || i == 1)
+            binaryFloat += ' ';
+    }
+
+    return binaryFloat;
+}
+
 int main() {
 
     std::cout.setf(std::ios::boolalpha);
@@ -102,6 +141,8 @@ int main() {
                     break;
                 }
                 std::cout << "Decimal float: " << userInput << '\n';
+                std::string binaryFloat = getBitsOfFloat(userInput, isDebug);
+                std::cout << "Binary representation: " << binaryFloat << '\n';
                 break;
             }
 
