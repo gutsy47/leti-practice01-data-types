@@ -129,6 +129,7 @@ int main() {
 
     std::cout.setf(std::ios::boolalpha);
     bool isDebug = false;
+    std::cout << "Enter 'h' to get list of commands\n";
 
     // Main loop
     while (true) {
@@ -206,6 +207,25 @@ int main() {
             case '9': {
                 isDebug = !isDebug;
                 std::cout << "Debug mode: " << isDebug << '\n';
+                break;
+            }
+
+            // Help
+            case 'h': {
+                std::cout << "Available commands:\n";
+                std::cout << std::setw(32) << std::setfill('-') << '\n';
+                std::cout << "h: Help\n";
+                std::cout << std::setw(32) << std::setfill('-') << '\n';
+                std::cout << "1: Print the amount of memory occupied by different types of data\n";
+                std::cout << "2: Print the binary representation in memory of an integer\n";
+                std::cout << "3: Print the binary representation in memory of a float\n";
+                std::cout << "4: Print the binary representation in memory of a double\n";
+                std::cout << std::setw(32) << std::setfill('-') << '\n';
+                std::cout << "9: Turn on debug mode (display all comparisons)\n";
+                std::cout << std::setw(32) << std::setfill('-') << '\n';
+                std::cout << "0: Exit\n";
+                std::cout << std::setw(32) << std::setfill('-') << '\n';
+                std::cout << std::setfill(' ');
                 break;
             }
 
