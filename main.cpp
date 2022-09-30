@@ -54,6 +54,7 @@ std::string getBitsOfFloat(float input, bool isDebug = false) {
      * :param isDebug: bool - displays every comparison if true
      * :return: std::string - binary representation of input
      */
+
     // Use union due to binary operands isn't working with float
     union FloatIntUnion {
         int i;
@@ -79,12 +80,50 @@ std::string getBitsOfFloat(float input, bool isDebug = false) {
         binaryFloat += bit;
         mask >>= 1;
 
-        if (i % 8 == 0 || i == 1)
+        if (i == 1 || i == 9)
             binaryFloat += ' ';
     }
 
     return binaryFloat;
 }
+
+
+std::string getBitsOFDouble(double input) {
+    /*
+     * Returns binary representation of double
+     * :param input: double - decimal double
+     * :return: std::string - binary representation of input
+     */
+
+    // Use union due to binary operands isn't working with double
+    // Instead of integer which used in getBitsOfFloat use array of char
+    // 1 element of array represents one byte of doubled
+    union DoubleIntUnion {
+        unsigned char c[sizeof(double)];
+        double d;
+    };
+
+    DoubleIntUnion value{.d = input};
+    std::string binaryDouble;
+    for (int i = sizeof(double)-1; i >= 0; i--) {
+        unsigned int order = sizeof(char) * 8;
+        unsigned int mask = 1 << (order - 1);
+        for (int j = 1; j <= order; j++) {
+
+            char bit = value.c[i] & mask ? '1' : '0';
+
+            binaryDouble += bit;
+            mask >>= 1;
+
+            int currentBitIndex = (7 - i) * 8 + j;
+            if (currentBitIndex == 1 || currentBitIndex == 12)
+                binaryDouble += ' ';
+        }
+    }
+
+    return binaryDouble;
+}
+
 
 int main() {
 
@@ -158,13 +197,19 @@ int main() {
                     break;
                 }
                 std::cout << "Decimal double: " << userInput << '\n';
+                std::string binaryDouble = getBitsOFDouble(userInput);
+                std::cout << "Binary representation: " << binaryDouble << '\n';
                 break;
             }
+
+            // Turn on debug mode (display all comparisons)
             case '9': {
                 isDebug = !isDebug;
                 std::cout << "Debug mode: " << isDebug << '\n';
                 break;
             }
+
+            // Exit
             default: {
                 std::cout << "RuntimeError: unknown command\n";
             }
