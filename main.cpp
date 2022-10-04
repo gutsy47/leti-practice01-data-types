@@ -15,27 +15,20 @@ void printSizeOfTypes() {
 }
 
 
-std::string getBitsOfInt(int value, bool isDebug = false) {
+std::string getBitsOfInt(int value) {
     /*
      * Returns binary representation of int
      * :param value: int - decimal integer
      * :param isDebug: bool - displays every comparison if true
      * :return: std::string - binary representation of value
      */
+
     unsigned int order = sizeof(int) * 8;
     unsigned int mask = 1 << (order - 1);
     std::string binaryInt;
     for (int i = 1; i <= order; i++) {
 
         char bit = value & mask ? '1' : '0';
-
-        // Display iteration details
-        if (isDebug) {
-            std::cout << value << " & " << std::setw(10) << mask << " = " << bit;
-            std::string binaryValue = getBitsOfInt(value);
-            std::string binaryMask = getBitsOfInt(int(mask));
-            std::cout << " | " << binaryValue << "& " << binaryMask << '\n';
-        }
 
         binaryInt += bit;
         mask >>= 1;
@@ -47,7 +40,7 @@ std::string getBitsOfInt(int value, bool isDebug = false) {
 }
 
 
-std::string getBitsOfFloat(float input, bool isDebug = false) {
+std::string getBitsOfFloat(float input) {
     /*
      * Returns binary representation of float
      * :param input: float - decimal float
@@ -69,14 +62,6 @@ std::string getBitsOfFloat(float input, bool isDebug = false) {
 
         char bit = value.i & mask ? '1' : '0';
 
-        // Display iteration details
-        if (isDebug) {
-            std::cout << value.f << " & " << std::setw(10) << mask << " = " << bit;
-            std::string binaryValue = getBitsOfInt(value.i); // It's enough to get int`s bits (or float, no diff)
-            std::string binaryMask = getBitsOfInt(int(mask));
-            std::cout << " | " << binaryValue << "& " << binaryMask << '\n';
-        }
-
         binaryFloat += bit;
         mask >>= 1;
 
@@ -97,7 +82,7 @@ std::string getBitsOFDouble(double input) {
 
     // Use union due to binary operands isn't working with double
     // Instead of integer which used in getBitsOfFloat use array of char
-    // 1 element of array represents one byte of doubled
+    // One element of array represents one byte of double
     union DoubleIntUnion {
         unsigned char c[sizeof(double)];
         double d;
@@ -128,7 +113,6 @@ std::string getBitsOFDouble(double input) {
 int main() {
 
     std::cout.setf(std::ios::boolalpha);
-    bool isDebug = false;
     std::cout << "Enter 'h' to get list of commands\n";
 
     // Main loop
@@ -139,6 +123,8 @@ int main() {
         std::cout << "<< Action: \n>> ";
         std::cin.sync();
         std::cin >> userAction;
+
+        // Exit
         if (userAction == '0') {
             break;
         }
@@ -163,9 +149,9 @@ int main() {
                     std::cin.clear();
                     break;
                 }
-                std::cout << "Decimal integer: " << userInput << '\n';
-                std::string binaryInt = getBitsOfInt(userInput, isDebug);
-                std::cout << "Binary representation: " << binaryInt << '\n';
+                std::cout << std::setw(23) << "Decimal integer: " << userInput << '\n';
+                std::string binaryInt = getBitsOfInt(userInput);
+                std::cout << std::setw(23) << "Binary representation: " << binaryInt << '\n';
                 break;
             }
 
@@ -180,9 +166,9 @@ int main() {
                     std::cin.clear();
                     break;
                 }
-                std::cout << "Decimal float: " << userInput << '\n';
-                std::string binaryFloat = getBitsOfFloat(userInput, isDebug);
-                std::cout << "Binary representation: " << binaryFloat << '\n';
+                std::cout << std::setw(23) << "Decimal float: " << userInput << '\n';
+                std::string binaryFloat = getBitsOfFloat(userInput);
+                std::cout << std::setw(23) << "Binary representation: " << binaryFloat << '\n';
                 break;
             }
 
@@ -197,16 +183,9 @@ int main() {
                     std::cin.clear();
                     break;
                 }
-                std::cout << "Decimal double: " << userInput << '\n';
+                std::cout << std::setw(23) << "Decimal double: " << userInput << '\n';
                 std::string binaryDouble = getBitsOFDouble(userInput);
-                std::cout << "Binary representation: " << binaryDouble << '\n';
-                break;
-            }
-
-            // Turn on debug mode (display all comparisons)
-            case '9': {
-                isDebug = !isDebug;
-                std::cout << "Debug mode: " << isDebug << '\n';
+                std::cout << std::setw(23) << "Binary representation: " << binaryDouble << '\n';
                 break;
             }
 
@@ -221,15 +200,13 @@ int main() {
                 std::cout << "3: Print the binary representation in memory of a float\n";
                 std::cout << "4: Print the binary representation in memory of a double\n";
                 std::cout << std::setw(32) << std::setfill('-') << '\n';
-                std::cout << "9: Turn on debug mode (display all comparisons)\n";
-                std::cout << std::setw(32) << std::setfill('-') << '\n';
                 std::cout << "0: Exit\n";
                 std::cout << std::setw(32) << std::setfill('-') << '\n';
                 std::cout << std::setfill(' ');
                 break;
             }
 
-            // Exit
+            // Unknown command
             default: {
                 std::cout << "RuntimeError: unknown command\n";
             }
